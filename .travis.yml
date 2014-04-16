@@ -7,5 +7,6 @@ php:
     - 5.5
 
 before_script:
+    - composer self-update
     - composer install
     - sqlite3 app.db < resources/sql/schema.sql
