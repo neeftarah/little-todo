@@ -32,8 +32,9 @@ Installation
 ### Install by download
 
 Alternatively, you can (will be able to) download the full package (not created yet) with all dependences and a created database.
-1. Download the package
-2. Extract it to your webserver directory
+
+1. Download the package.
+2. Extract it to your webserver directory.
 3. In order to write to the database, you may need to `chmod` the resources directory to make it writable.
 4. Run the application into your browser and create your own account.
 
