@@ -1,5 +1,8 @@
 {
+   "name": "Neeftarah/littleTodo",
+   "description": "Simple task manager develop with Silex, Twig, Bootstrap...",
    "require": {
+      "php": ">=5.3.3",
       "silex/silex": "~1.2",
       "twig/twig": "~1.15",
       "symfony/twig-bridge": "~2.4",
@@ -19,5 +22,11 @@
       "psr-0": {
          "Todo": "src/"
       }
-   }
+   },
+   "repositories": [
+      {
+         "type": "vcs",
+         "url":  "https://github.com/Neeftarah/littleTodo"
+      }
+   ]
 }
