@@ -1,6 +1,16 @@
 {
    "name": "Neeftarah/littleTodo",
    "description": "Simple task manager develop with Silex, Twig, Bootstrap...",
+   "keywords": ["todoMVC", "todo", "to-do", "task", "Silex"],
+   "homepage": "https://github.com/Neeftarah/littleTodo",
+   "license": "GPLv3",
+   "authors": [
+      {
+         "name": "Jérémy MOREAU",
+         "email": "jmoreau.dev@gmail.com",
+         "homepage": "https://github.com/Neeftarah",
+      }
+   ],
    "require": {
       "php": ">=5.3.3",
       "silex/silex": "~1.2",
