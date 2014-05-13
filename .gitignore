@@ -1,3 +1,4 @@
 composer.lock
 app.db
 vendor/
+bin/
