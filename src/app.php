@@ -6,6 +6,8 @@ require_once APP_DIR . '/vendor/autoload.php';
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;  
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 $app = new Silex\Application();
 
@@ -44,6 +46,22 @@ $app->register(new Silex\Provider\MonologServiceProvider(), array(
     'monolog.name'    => 'littleTodo',
     'monolog.level'	  => 300	// => Logger::WARNING
 ));
+
+// Exception management
+$app->error(function(\Exception $e) use ($app) {
+    if ($e instanceof NotFoundHttpException) {
+        $content = vsprintf('<h1>%d - %s (%s)</h1>', array(
+           $e->getStatusCode(),
+           Response::$statusTexts[$e->getStatusCode()],
+           $app['request']->getRequestUri()
+        ));
+        return new Response($content, $e->getStatusCode());
+    }
+
+    if ($e instanceof HttpException) {
+        return new Response('<h1>You should go eat some cookies while we\'re fixing this feature!</h1>', $e->getStatusCode());
+    }
+});
 
 
 // Use PDO to access our sqlite db.
