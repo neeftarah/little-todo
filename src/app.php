@@ -27,22 +27,22 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 ));
 
 // Register Monolog provider
-if(!file_exists(APP_DIR . '/log/app.log') || !file_exists(APP_DIR . '/log/app_dev.log')) {
+if(!file_exists(APP_DIR . '/log/app.log')) {
 	$file = fopen(APP_DIR . '/log/app.log', 'w');
-	$file_dev = fopen(APP_DIR . '/log/app_dev.log', 'w');
 	if($file) {
 		fclose($file);
 		fclose($file_dev);
 	} elseif($app['debug']) {
 		exit('Log files can\'t be created!');
 	}
-} elseif((!is_writable(APP_DIR . '/log/app.log') || !is_writable(APP_DIR . '/log/app_dev.log')) && ($app['debug'])) {
+} elseif(!is_writable(APP_DIR . '/log/app.log') && ($app['debug'])) {
 	exit('Log file is not writable!');
 }
 
 $app->register(new Silex\Provider\MonologServiceProvider(), array(
-    'monolog.logfile' => ($app['debug']) ? APP_DIR . '/log/app_dev.log' : APP_DIR . '/log/app.log',
-    'monolog.name'    => 'littleTodo'
+    'monolog.logfile' => APP_DIR . '/log/app.log',
+    'monolog.name'    => 'littleTodo',
+    'monolog.level'	  => 300	// => Logger::WARNING
 ));
 
 
