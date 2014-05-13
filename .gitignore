@@ -2,3 +2,5 @@ composer.lock
 app.db
 vendor/
 bin/
+log/app.log
+app_dev.log
