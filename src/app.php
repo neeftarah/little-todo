@@ -1,18 +1,19 @@
 <?php
 // src/app.php
-if(!defined('APP_DIR')) return false;
+if(!defined('APP_DIR'))
+   define('APP_DIR', dirname(__DIR__));
 
 require_once APP_DIR . '/vendor/autoload.php';
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpException;  
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 $app = new Silex\Application();
 
 // If in developpment
-$app['debug']              = false;
+$app['debug']              = true;
 $app['cache.path']         = APP_DIR . '/bin';
 $app['littleTodo.storage'] = APP_DIR . '/app.db';
 
@@ -33,7 +34,6 @@ if(!file_exists(APP_DIR . '/log/app.log')) {
 	$file = fopen(APP_DIR . '/log/app.log', 'w');
 	if($file) {
 		fclose($file);
-		fclose($file_dev);
 	} elseif($app['debug']) {
 		exit('Log files can\'t be created!');
 	}
@@ -44,7 +44,7 @@ if(!file_exists(APP_DIR . '/log/app.log')) {
 $app->register(new Silex\Provider\MonologServiceProvider(), array(
     'monolog.logfile' => APP_DIR . '/log/app.log',
     'monolog.name'    => 'littleTodo',
-    'monolog.level'	  => 300	// => Logger::WARNING
+    'monolog.level'   => 300	// => Logger::WARNING
 ));
 
 // Exception management
