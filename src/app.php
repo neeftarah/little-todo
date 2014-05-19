@@ -35,10 +35,10 @@ if(!file_exists(APP_DIR . '/log/app.log')) {
 	if($file) {
 		fclose($file);
 	} elseif($app['debug']) {
-		exit('Log files can\'t be created!');
+      throw new Exception("Log files can\'t be created!");
 	}
 } elseif(!is_writable(APP_DIR . '/log/app.log') && ($app['debug'])) {
-	exit('Log file is not writable!');
+   throw new Exception("Log file is not writable!");
 }
 
 $app->register(new Silex\Provider\MonologServiceProvider(), array(
