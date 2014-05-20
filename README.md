@@ -1,7 +1,7 @@
-littleTodo, a simple task manager
+little-todo, a simple task manager
 =================================
 
-littleTodo is a simple task manager which purpose is to try and train myself with Silex, Twig, Bootstrap, PHPUnit and more.
+little-todo is a simple task manager which purpose is to try and train myself with Silex, Twig, Bootstrap, PHPUnit and more.
 
 **This is under development**
 
@@ -41,8 +41,8 @@ Alternatively, you can (will be able to) download the full package (not created 
 License
 -------
 
-littleTodo is released under the GPL v3 (or later) license, see the [LICENSE](LICENSE)
+little-todo is released under the GPL v3 (or later) license, see the [LICENSE](LICENSE)
 
 Status
 ------
-[![Build Status](https://travis-ci.org/Neeftarah/littleTodo.svg?branch=master)](https://travis-ci.org/Neeftarah/littleTodo)
+[![Build Status](https://travis-ci.org/neeftarah/little-todo.svg?branch=master)](https://travis-ci.org/neeftarah/little-todo)
