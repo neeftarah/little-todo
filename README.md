@@ -46,3 +46,4 @@ little-todo is released under the GPL v3 (or later) license, see the [LICENSE](L
 Status
 ------
 [![Build Status](https://travis-ci.org/neeftarah/little-todo.svg?branch=master)](https://travis-ci.org/neeftarah/little-todo)
+[![PullReview stats](https://www.pullreview.com/github/neeftarah/little-todo/badges/master.svg?)](https://www.pullreview.com/github/neeftarah/little-todo/reviews/master)
