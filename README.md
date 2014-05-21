@@ -47,3 +47,4 @@ Status
 ------
 [![Build Status](https://travis-ci.org/neeftarah/little-todo.svg?branch=master)](https://travis-ci.org/neeftarah/little-todo)
 [![PullReview stats](https://www.pullreview.com/github/neeftarah/little-todo/badges/master.svg?)](https://www.pullreview.com/github/neeftarah/little-todo/reviews/master)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/f63c0c86-1819-4609-b439-ddcf8a1335f7/mini.png)](https://insight.sensiolabs.com/projects/f63c0c86-1819-4609-b439-ddcf8a1335f7)
