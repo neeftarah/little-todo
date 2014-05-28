@@ -9,11 +9,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 $app = new Silex\Application();
 
-// If in developpment
+// Application configuration. TODO: Move to a config file
 $app['debug']              = true;
 $app['cache.path']         = APP_DIR . '/bin';
 $app['littleTodo.storage'] = APP_DIR . '/app.db';
@@ -30,7 +29,7 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
                                        : FALSE),
 ));
 
-// Register Monolog provider
+// Register Monolog provider. TODO: Move  tests in an installation file
 if(!file_exists(APP_DIR . '/log/app.log')) {
 	$file = fopen(APP_DIR . '/log/app.log', 'w');
 	if($file) {
@@ -49,7 +48,7 @@ $app->register(new Silex\Provider\MonologServiceProvider(), array(
 ));
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
-// Exception management
+// Exception management.
 $app->error(function(\Exception $e) use ($app) {
     if ($e instanceof NotFoundHttpException) {
         $content = vsprintf('<h1>%d - %s (%s)</h1>', array(
@@ -77,7 +76,7 @@ $app['littleTodo'] = $app->share(function($app) {
 });
 
 
-
+// Home page route. TODO: Move business code in a controller class
 $app->get('/', function () use($app) {
    return $app['twig']->render('index.html.twig', array(
       'meta'            => array('title' => 'littleTodo'),
@@ -89,6 +88,7 @@ $app->get('/', function () use($app) {
 })
 ->bind('homepage');
 
+// Project page route. Tasks list. TODO: Move business code in a controller class
 $app->get('/project/{id}', function($id) use ($app) {
    return $app['twig']->render('index.html.twig', array(
       'meta'            => array('title' => 'littleTodo'),
@@ -100,6 +100,7 @@ $app->get('/project/{id}', function($id) use ($app) {
 })
 ->bind('project');
 
+// Project adding route. TODO: Move business code in a controller class
 $app->post('/project/add', function (Request $request) use($app) {
    $project = $request->get('new_project');
    $db      = $app['pdo'];
@@ -119,13 +120,10 @@ $app->post('/project/add', function (Request $request) use($app) {
         return new Response('<h1>Insertion failed!</h1>', $e->getStatusCode());
    }
    return new Response('OK : ' . $project);
-
-   // $subRequest = Request::create($app['url_generator']->generate('homepage'), 'GET');
-   // return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
-   // return $app->redirect($app['url_generator']->generate('homepage'));
 })
 ->bind('project_add');
 
+// Task adding route. TODO: Move business code in a controller class
 $app->post('/task/add', function (Request $request) use($app) {
    $task       = $request->get('new_task');
    $project_id = $request->get('current_project');
@@ -139,15 +137,10 @@ $app->post('/task/add', function (Request $request) use($app) {
         return new Response('<h1>Insertion failed!</h1>', $e->getStatusCode());
    }
    return new Response('OK : ' . $task);
-
-   // $subRequest = Request::create($app['url_generator']->generate('homepage'), 'GET');
-   // return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
-   // return $app->redirect($app['url_generator']->generate('homepage'));
 })
 ->bind('task_add');
 
-
-
+// TODO: Move business code in a controller class
 function getProjects($db) {
    $query = "SELECT p.id, p.name, COUNT(t.id) AS tasks
              FROM projects p
@@ -158,6 +151,8 @@ function getProjects($db) {
    $st->execute();
    return $st->fetchAll();
 }
+
+// TODO: Move business code in a controller class
 function getTasks($db, $project_id, $finished = 0) {
    $query = "SELECT id, title, deadline, priority
              FROM tasks
