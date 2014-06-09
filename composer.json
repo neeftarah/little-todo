@@ -41,7 +41,8 @@
    },
    "autoload": {
       "psr-0": {
-         "Todo": "src/"
+         "Controllers"        : "src/",
+         "Models"             : "src/"
       }
    },
    "repositories": [
