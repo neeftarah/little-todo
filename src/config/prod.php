@@ -1,9 +1,10 @@
 <?php
-
-define('PATH_APP', dirname(dirname(__DIR__)));
-define('PATH_WEB', PATH_APP . '/web');
-define('PATH_SRC', PATH_APP . '/src');
-define('PATH_BIN', PATH_APP . '/bin');
+if(!defined('PATH_APP')) {
+    define('PATH_APP', dirname(dirname(__DIR__)));
+    define('PATH_WEB', PATH_APP . '/web');
+    define('PATH_SRC', PATH_APP . '/src');
+    define('PATH_BIN', PATH_APP . '/bin');
+}
 
 // Local
 $app['locale'] = 'fr';

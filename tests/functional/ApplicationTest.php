@@ -6,7 +6,11 @@ class ApplicationTest extends WebTestCase
 {
    public function createApplication()
    {
-      $app = require __DIR__ . '/../../src/app.php';
+      require __DIR__ . '/../../vendor/autoload.php';
+
+      $app = new Silex\Application();
+      require __DIR__ . '/../../src/config/dev.php';
+      require __DIR__ . '/../../src/app.php';
       return $app;
    }
 
