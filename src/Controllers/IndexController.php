@@ -3,6 +3,7 @@ namespace Controllers;
 
 use Silex\Application;
 use Silex\ControllerProviderInterface;
+use Models\Project;
 
 class IndexController implements ControllerProviderInterface
 {
@@ -17,7 +18,7 @@ class IndexController implements ControllerProviderInterface
             'meta'            => array('title' => 'littleTodo'),
             'page'            => array('title' => 'littleTodo'),
             'current_project' => 0,
-            'projects'        => array(), // getProjects($app['pdo']),
+            'projects'        => Project::listProjects($app),
             'tasks'           => array(),
         ));
     }

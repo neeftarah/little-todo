@@ -41,8 +41,8 @@ $app['security.encoder.digest'] = $app->share(function ($app) {
 $app->register(new Silex\Provider\TranslationServiceProvider());
 $app['translator'] = $app->share($app->extend('translator', function($translator, $app) {
     $translator->addLoader('yaml', new YamlFileLoader());
-    $translator->addResource('yaml', PATH_SRC.'/locales/en.yml', 'en');
-    $translator->addResource('yaml', PATH_SRC.'/locales/fr.yml', 'fr');
+    $translator->addResource('yaml', PATH_SRC.'/Locales/en.yml', 'en');
+    $translator->addResource('yaml', PATH_SRC.'/Locales/fr.yml', 'fr');
     return $translator;
 }));
 
@@ -55,7 +55,7 @@ $app->register(new Silex\Provider\MonologServiceProvider(), array(
 
 // Register Twig provider
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
-   'twig.path'    => PATH_SRC . '/views',
+   'twig.path'    => PATH_SRC . '/Views',
    'twig.options' => array(
       'cache'            => isset($app['twig.options.cache']) ? $app['twig.options.cache'] : false,
       'strict_variables' => true

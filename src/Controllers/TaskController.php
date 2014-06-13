@@ -4,6 +4,7 @@ namespace Controllers;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Models\Task;
 
 class TaskController implements ControllerProviderInterface
 {
@@ -18,6 +19,9 @@ class TaskController implements ControllerProviderInterface
     public function addAction(Request $request) {
         $task       = $request->get('new_task');
         $project_id = $request->get('current_project');
+        Task::addTask();
+
+
         $db         = $app['pdo'];
 
         try {
@@ -38,19 +42,5 @@ class TaskController implements ControllerProviderInterface
 
     public function listAction($id, Request $request) {
 
-    }
-
-    // TODO: Move into model
-    protected function getTasks($db, $project_id, $finished = 0) {
-       $query = "SELECT id, title, deadline, priority
-                 FROM tasks
-                 WHERE project_id = :project_id
-                 AND is_finished = :finished
-                 ORDER BY deadline, priority";
-       $st = $db->prepare($query);
-       $st->bindValue(':project_id', $project_id);
-       $st->bindValue(':finished', $finished);
-       $st->execute();
-       return $st->fetchAll();
     }
 }

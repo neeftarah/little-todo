@@ -4,6 +4,8 @@ namespace Controllers;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Models\Project;
+use Models\Task;
 
 class ProjectController implements ControllerProviderInterface
 {
@@ -41,13 +43,13 @@ class ProjectController implements ControllerProviderInterface
 
     }
 
-    public function listAction(Request $request) {
+    public function listAction(Application $app, $id) {
         return $app['twig']->render('project.html.twig', array(
             'meta'            => array('title' => 'littleTodo'),
             'page'            => array('title' => 'littleTodo'),
             'current_project' => $id,
-            'projects'        => getProjects($app['pdo']),
-            'tasks'           => getTasks($app['pdo'], $id),
+            'projects'        => Project::listprojects($app),
+            'tasks'           => Task::listTasks($app, $id),
         ));
     }
 
