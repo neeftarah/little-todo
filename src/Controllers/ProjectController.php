@@ -20,9 +20,9 @@ class ProjectController implements ControllerProviderInterface
 
     public function addAction(Application $app, $id) {
         $datas['name'] = $request->get('new_project');
-        Project::addProject($app, $datas)
+        Project::addProject($app, $datas);
 
-        return new Response('OK : ' . $project);
+        return new Response('OK : ' . $name);
     }
 
     public function editAction(Application $app, $id, Request $request) {

@@ -2,7 +2,6 @@
 // src/app.php
 require_once PATH_APP . '/vendor/autoload.php';
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -96,33 +95,41 @@ $app->error(function(\Exception $e) use ($app) {
 
 // Define assets
 if (isset($app['assetic.enabled']) && $app['assetic.enabled']) {
-   $app->register(new SilexAssetic\AsseticServiceProvider(), array(
-      'assetic.options' => array(
-         'debug'            => $app['debug'],
-         'auto_dump_assets' => $app['debug'],
-      ),
-      'assetic.filters' => $app->protect(function($fm) use ($app) {
-         $fm->set('lessphp', new Assetic\Filter\LessphpFilter());
-      }),
-      'assetic.assets' => $app->protect(function($am, $fm) use ($app) {
-         $am->set('styles', new Assetic\Asset\AssetCache(
-            new Assetic\Asset\GlobAsset(
-               $app['assetic.input.path_to_css'],
-               array($fm->get('lessphp'))
-            ),
-            new Assetic\Cache\FilesystemCache($app['assetic.path_to_cache'])
-         ));
-         $am->get('styles')->setTargetPath($app['assetic.output.path_to_css']);
+    $app->register(new SilexAssetic\AsseticServiceProvider(), array(
+        'assetic.options' => array(
+            'debug'            => $app['debug'],
+            'auto_dump_assets' => $app['debug'],
+        )
+    ));
 
-         $am->set('scripts', new Assetic\Asset\AssetCache(
-            new Assetic\Asset\GlobAsset(
-               $app['assetic.input.path_to_js']
-            ),
-            new Assetic\Cache\FilesystemCache($app['assetic.path_to_cache'])
-         ));
-         $am->get('scripts')->setTargetPath($app['assetic.output.path_to_js']);
-      })
-   ));
+    $app['assetic.filter_manager'] = $app->share(
+        $app->extend('assetic.filter_manager', function ($fm, $app) {
+            $fm->set('lessphp', new Assetic\Filter\LessphpFilter());
+
+            return $fm;
+        })
+    );
+
+    $app['assetic.asset_manager'] = $app->share(
+        $app->extend('assetic.asset_manager', function ($am, $app) {
+            $am->set('styles', new Assetic\Asset\AssetCache(
+                new Assetic\Asset\GlobAsset(
+                    $app['assetic.input.path_to_css'],
+                    array($app['assetic.filter_manager']->get('lessphp'))
+                ),
+                new Assetic\Cache\FilesystemCache($app['assetic.path_to_cache'])
+            ));
+            $am->get('styles')->setTargetPath($app['assetic.output.path_to_css']);
+
+            $am->set('scripts', new Assetic\Asset\AssetCache(
+                new Assetic\Asset\GlobAsset($app['assetic.input.path_to_js']),
+                new Assetic\Cache\FilesystemCache($app['assetic.path_to_cache'])
+            ));
+            $am->get('scripts')->setTargetPath($app['assetic.output.path_to_js']);
+
+            return $am;
+        })
+    );
 }
 
 require PATH_SRC . '/routes.php';
