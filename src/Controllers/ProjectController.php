@@ -4,6 +4,7 @@ namespace Controllers;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Models\Project;
 use Models\Task;
 
@@ -17,30 +18,19 @@ class ProjectController implements ControllerProviderInterface
         return $projectController;
     }
 
-    public function addAction($id) {
-        $project = $request->get('new_project');
-        $db      = $app['pdo'];
-
-        try {
-            // Get order
-            $st = $db->prepare("SELECT MAX(orderno) FROM projects");
-            $st->execute();
-            list($orderno) = $st->fetch();
-            $orderno++;
-
-            $st = $db->prepare("INSERT INTO projects (name, orderno) VALUES (:name, :orderno)");
-            $st->bindValue(':name', $project);
-            $st->bindValue(':orderno', $orderno);
-            $st->execute();
-        } catch (Exception $e) {
-            return new Response('<h1>Insertion failed!</h1>', $e->getStatusCode());
-        }
+    public function addAction(Application $app, $id) {
+        $datas['name'] = $request->get('new_project');
+        Project::addProject($app, $datas)
 
         return new Response('OK : ' . $project);
     }
 
-    public function editAction($id, Request $request) {
+    public function editAction(Application $app, $id, Request $request) {
+        $datas['name'] = $request->get('project_name');
+        $project_id    = $request->get('project_id');
+        Project::editProject($app, $datas, $project_id);
 
+        return new Response('OK : ' . $project);
     }
 
     public function listAction(Application $app, $id) {
@@ -51,18 +41,5 @@ class ProjectController implements ControllerProviderInterface
             'projects'        => Project::listprojects($app),
             'tasks'           => Task::listTasks($app, $id),
         ));
-    }
-
-
-    // TODO: Move into model
-    protected function getProjects($db) {
-        $query = "SELECT p.id, p.name, COUNT(t.id) AS tasks
-                 FROM projects p
-                 LEFT JOIN tasks t ON t.project_id = p.id
-                 GROUP BY p.id
-                 ORDER BY p.orderno";
-        $st = $db->prepare($query);
-        $st->execute();
-        return $st->fetchAll();
     }
 }

@@ -4,6 +4,7 @@ namespace Controllers;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Models\Task;
 
 class TaskController implements ControllerProviderInterface
@@ -16,31 +17,26 @@ class TaskController implements ControllerProviderInterface
         return $taskController;
     }
 
-    public function addAction(Request $request) {
-        $task       = $request->get('new_task');
-        $project_id = $request->get('current_project');
-        Task::addTask();
-
-
-        $db         = $app['pdo'];
-
-        try {
-            $st = $db->prepare("INSERT INTO tasks (project_id, title) VALUES (:project_id, :title)");
-            $st->bindValue(':project_id', $project_id);
-            $st->bindValue(':title', $task);
-            $st->execute();
-        } catch (Exception $e) {
-            return new Response('<h1>Insertion failed!</h1>', $e->getStatusCode());
-        }
+    public function addAction(Application $app, Request $request) {
+        $datas = array(
+            'project_id' => (int) $request->get('current_project'),
+            'title' => htmlentities($request->get('new_task')),
+        );
+        Task::addTask($app, $datas);
 
         return new Response('OK : ' . $task);
     }
 
-    public function editAction($id, Request $request) {
+    public function editAction(Application $app, Request $request) {
+        $datas = array(
+            'title' => htmlentities($request->get('task_title')),
+        );
+        Task::editTask($app, (int) $request->get('task_id'), $datas);
 
+        return new Response('OK : ' . $task);
     }
 
-    public function listAction($id, Request $request) {
+    public function listAction(Application $app, $id, Request $request) {
 
     }
 }

@@ -14,7 +14,13 @@ class Task
      * return Integer number of affected row => 1 on success, 0 on failure
      */
     public static function addTask(Application $app, $datas) {
-        return $app['db']->insert('user', $datas);
+        $query = "SELECT MAX(orderno)
+                  FROM tasks
+                  WHERE project_id = :project_id";
+        list($orderno) = $app['db']->fetch($query, array('project_id' => $datas['project_id']));
+        $datas['orderno'] = $orderno + 1;
+
+        return $app['db']->insert('tasks', $datas);
     }
 
     /**
@@ -25,7 +31,7 @@ class Task
      * return Integer number of affected row => 1 on success, 0 on failure
      */
     public static function editTask(Application $app, $id, $datas) {
-        return $app['db']->update('user', $datas, $id);
+        return $app['db']->update('tasks', $datas, $id);
     }
 
     /**

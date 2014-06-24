@@ -14,7 +14,12 @@ class Project
      * return Integer number of affected row => 1 on success, 0 on failure
      */
     public static function addProject(Application $app, $datas) {
-        return $app['db']->insert('user', $datas);
+        $query = "SELECT MAX(orderno)
+                  FROM projects";
+        list($orderno) = $app['db']->fetch($query);
+        $datas['orderno'] = $orderno + 1;
+
+        return $app['db']->insert('projects', $datas);
     }
 
     /**
@@ -25,7 +30,7 @@ class Project
      * return Integer number of affected row => 1 on success, 0 on failure
      */
     public static function editProject(Application $app, $id, $datas) {
-        return $app['db']->update('user', $datas, $id);
+        return $app['db']->update('projects', $datas, $id);
     }
 
     /**
