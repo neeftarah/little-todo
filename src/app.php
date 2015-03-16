@@ -38,7 +38,7 @@ $app['security.encoder.digest'] = $app->share(function ($app) {
 
 // Register translation provider
 $app->register(new Silex\Provider\TranslationServiceProvider());
-$app['translator'] = $app->share($app->extend('translator', function($translator, $app) {
+$app['translator'] = $app->share($app->extend('translator', function(Silex\Translator $translator, $app) {
     $translator->addLoader('yaml', new YamlFileLoader());
     $translator->addResource('yaml', PATH_SRC.'/Locales/en.yml', 'en');
     $translator->addResource('yaml', PATH_SRC.'/Locales/fr.yml', 'fr');
@@ -103,7 +103,7 @@ if (isset($app['assetic.enabled']) && $app['assetic.enabled']) {
     ));
 
     $app['assetic.filter_manager'] = $app->share(
-        $app->extend('assetic.filter_manager', function ($fm, $app) {
+        $app->extend('assetic.filter_manager', function (Assetic\FilterManager $fm, $app) {
             $fm->set('lessphp', new Assetic\Filter\LessphpFilter());
 
             return $fm;
@@ -111,7 +111,7 @@ if (isset($app['assetic.enabled']) && $app['assetic.enabled']) {
     );
 
     $app['assetic.asset_manager'] = $app->share(
-        $app->extend('assetic.asset_manager', function ($am, $app) {
+        $app->extend('assetic.asset_manager', function (Assetic\AssetManager $am, $app) {
             $am->set('styles', new Assetic\Asset\AssetCache(
                 new Assetic\Asset\GlobAsset(
                     $app['assetic.input.path_to_css'],
